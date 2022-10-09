@@ -84,6 +84,12 @@ int main(int argc, char *argv[])
   int n;
   dist_type file_dist;
 
+  if (argc != 2)
+  {
+    cout << "pls give 1 input file" << endl;
+    exit(1);
+  }
+
   strcpy(in_file_name, argv[1]);
   strcat(in_file_name, ".in");
   read_file(in_file_name, d, n);
