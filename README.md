@@ -1,1 +1,1 @@
-# Bitonc Euclidean Traveling Salesman Problem
+# Bitonic Euclidean Traveling Salesman Problem
