@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <cmath>
 
 using namespace std;
 
@@ -16,6 +17,8 @@ bool operator<(Coord lhs, Coord rhs)
 
 vector<Coord> getCoords(string fileName);
 bool checkBitonic(vector<Coord> path);
+double findPathLength(vector<Coord> path);
+double findPointDistance(Coord p1, Coord p2);
 
 int main(int argc, char **argv)
 {
@@ -28,6 +31,7 @@ int main(int argc, char **argv)
     }
 
     vector<Coord> coords = getCoords(argv[1]);
+    double shortestPath = INT16_MAX;
 
     while (next_permutation(coords.begin(), coords.end()))
     {
@@ -36,13 +40,18 @@ int main(int argc, char **argv)
 
         if (bitonic)
         {
-            for (auto coord : coords)
-            {
-                cout << coord.x << " " << coord.y << endl;
-            }
-            cout << endl;
+            double length = findPathLength(coords);
+            shortestPath = min(length, shortestPath);
+
+            // for (auto coord : coords)
+            // {
+            //     cout << coord.x << " " << coord.y << endl;
+            // }
+            // cout << endl;
         }
     }
+
+    cout << "Shortest path is " << shortestPath << endl;
 }
 
 vector<Coord> getCoords(string fileName)
@@ -104,6 +113,32 @@ bool checkBitonic(vector<Coord> path)
     }
 
     return true;
+}
+
+double findPathLength(vector<Coord> path)
+{
+    Coord minCoord = path[0];
+    for (auto coord : path)
+    {
+        minCoord = min(minCoord, coord);
+    }
+    path.push_back(minCoord); // add the min spot so that the path is complete!
+
+    Coord prevPoint = path[0];
+    double length = 0;
+
+    for (int i = 1; i < path.size(); i++)
+    {
+        length = length + findPointDistance(prevPoint, path[i]);
+        prevPoint = path[i];
+    }
+
+    return length;
+}
+
+double findPointDistance(Coord p1, Coord p2)
+{
+    return sqrt((pow(p2.x - p1.x, 2) + (pow(p2.y - p1.y, 2))));
 }
 
 // read in points from the input file
