@@ -61,7 +61,9 @@ int main(int argc, char **argv)
         }
     }
 
-    ofstream outFile("bruteForceOutFile.out");
+    string inFileName = string(argv[1]);
+    string outFileName = string(inFileName.erase(inFileName.size() - 3)) + "_brute_force.out";
+    ofstream outFile(outFileName);
 
     for (auto coord : shortestPathOrder)
     {
