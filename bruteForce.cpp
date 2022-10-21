@@ -61,13 +61,22 @@ int main(int argc, char **argv)
         }
     }
 
-    cout << "Shortest path is " << shortestPath << endl;
+    ofstream outFile("bruteForceOutFile.out");
+
     for (auto coord : shortestPathOrder)
     {
         auto pos = find(ogCoords.begin(), ogCoords.end(), coord);
         int index = pos - ogCoords.begin();
         cout << index << " ";
+        outFile << index << "  ";
     }
+
+    cout << endl
+         << "Shortest path is " << shortestPath << endl;
+    outFile << endl
+            << shortestPath << endl;
+
+    outFile.close();
 
     cout << endl;
 
