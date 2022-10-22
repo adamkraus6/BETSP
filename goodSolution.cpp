@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 	getCoords(argv[1]);
 	
-	int n = coords.size();
+	int n = coords.size()-1;
 
 	for(int j = 1; j < n-1; j++)
 	{
@@ -50,8 +50,17 @@ double betspTour(int i, int j)
 		return dp[i][j];
 	}
 
-	dp[i][j] = min(betspTour(i+1, j) + dist(i, i+1),
-		betspTour(i+1, i) + dist(j, i+1));
+	double opt1 = betspTour(i+1, j) + dist(i, i+1);
+	double opt2 = betspTour(i+1, i) + dist(j, i+1);
+
+	if(opt1 < opt2)
+	{
+		dp[i][j] = opt1;
+	}
+	else
+	{
+		dp[i][j] = opt2;
+	}
 	
 	return dp[i][j];
 }
@@ -71,9 +80,13 @@ void getCoords(string fileName)
     int n;
     fin >> n;
 
+	Coord coord;
+	coord.x = 0;
+	coord.y = 0;
+	coords.push_back(coord);
+
     for(int i = 0; i < n; i++)
     {
-        Coord coord;
         fin >> coord.x >> coord.y;
 		coords.push_back(coord);
     }
