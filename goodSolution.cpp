@@ -15,43 +15,44 @@ struct Coord {
 };
 
 vector<Coord> coords;
+double dp[200][200];
 
 void getCoords(string fileName);
 double dist(int i, int j);
-void outputDP(double dp[200][200], int n);
-double betspTour(double dp[200][200], int i, int j);
+double betspTour(int i, int j);
 
 int main(int argc, char** argv)
 {
-	double dp[200][200];
-
-    if(argc != 2)
+	if(argc != 2)
 	{
 		cout << "Please add input file argument" << endl;
 		return -1;
 	}
 
+	getCoords(argv[1]);
+	
 	int n = coords.size();
 
-	for(int j = 1; j < n - 1; j++)
+	for(int j = 1; j < n-1; j++)
 	{
 		dp[n-1][j] = dist(n-1, n) + dist(j, n);
 	}
 
-	outputDP(dp, n);
+	cout << betspTour(1, 1) << endl;
 
 	return 0;
 }
 
-double betspTour(double dp[200][200], int i, int j)
+double betspTour(int i, int j)
 {
 	if(dp[i][j] > 0)
 	{
 		return dp[i][j];
 	}
 
-	dp[i][j] = min(betspTour(dp, i+1, j) + dist(i, i+1), betspTour(dp, i+1, i));
-
+	dp[i][j] = min(betspTour(i+1, j) + dist(i, i+1),
+		betspTour(i+1, i) + dist(j, i+1));
+	
 	return dp[i][j];
 }
 
@@ -62,22 +63,8 @@ double dist(int i, int j)
 	return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
-void outputDP(double dp[200][200], int n)
-{
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			cout << setw(8) << setprecision(5) << dp[i][j];
-		}
-		cout << endl;
-	}
-}
-
 void getCoords(string fileName)
 {
-    vector<Coord> coords;
-    
     fstream fin;
     fin.open(fileName, ios::in);
 
