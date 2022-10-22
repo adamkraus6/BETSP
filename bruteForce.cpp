@@ -39,6 +39,7 @@ int main(int argc, char **argv)
     vector<Coord> coords = ogCoords;
     vector<Coord> shortestPathOrder;
     double shortestPath = INT16_MAX;
+    int permsDone = 0;
 
     while (next_permutation(coords.begin(), coords.end()))
     {
@@ -59,6 +60,8 @@ int main(int argc, char **argv)
             // }
             // cout << endl;
         }
+        permsDone++;
+        cout << permsDone << endl;
     }
 
     string inFileName = string(argv[1]);
