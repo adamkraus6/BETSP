@@ -17,7 +17,6 @@ int n = 0;
 
 void getCoords(string fileName);
 double dist(int i, int j);
-double optimalPath();
 
 int main(int argc, char** argv)
 {
@@ -31,13 +30,6 @@ int main(int argc, char** argv)
 	
 	n = coords.size()-1;
 
-	cout << optimalPath() << endl;
-
-	return 0;
-}
-
-double optimalPath()
-{
 	vector<double> M; // tour lengths
 	vector<double> K; // key points
 	M.resize(n+1);
@@ -136,14 +128,20 @@ double optimalPath()
 	// missing 0 point
 	order.push_back(0);
 
+	string inFileName = string(argv[1]);
+    string outFileName = string(inFileName.erase(inFileName.size() - 3)) + ".out";
+    ofstream fout(outFileName);
+
 	// print tour order
 	for(int i = n-1; i > 0; i--)
 	{
-		cout << order[i] << ' ';
+		fout << order[i] << ' ';
 	}
-	cout << order[0] << endl;
+	fout << order[0] << endl;
 
-	return M[n];
+	fout << M[n] << endl;
+
+	return 0;
 }
 
 double dist(int i, int j)
@@ -155,8 +153,7 @@ double dist(int i, int j)
 
 void getCoords(string fileName)
 {
-    fstream fin;
-    fin.open(fileName, ios::in);
+    ifstream fin(fileName);
 
     int n;
     fin >> n;
