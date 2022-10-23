@@ -1,12 +1,10 @@
-// geeks for geeks baby
-// https://www.geeksforgeeks.org/bitonic-traveling-salesman-problem/
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <iomanip>
 #include <math.h>
+#include <limits>
 
 using namespace std;
 
@@ -15,11 +13,11 @@ struct Coord {
 };
 
 vector<Coord> coords;
-double dp[200][200];
+int n = 0;
 
 void getCoords(string fileName);
 double dist(int i, int j);
-double betspTour(int i, int j);
+double optimalPath();
 
 int main(int argc, char** argv)
 {
@@ -31,38 +29,121 @@ int main(int argc, char** argv)
 
 	getCoords(argv[1]);
 	
-	int n = coords.size()-1;
+	n = coords.size()-1;
 
-	for(int j = 1; j < n-1; j++)
-	{
-		dp[n-1][j] = dist(n-1, n) + dist(j, n);
-	}
-
-	cout << betspTour(1, 1) << endl;
+	cout << optimalPath() << endl;
 
 	return 0;
 }
 
-double betspTour(int i, int j)
+double optimalPath()
 {
-	if(dp[i][j] > 0)
+	vector<double> M; // tour lengths
+	vector<double> K; // key points
+	M.resize(n+1);
+	K.resize(n+1);
+
+	M[1] = 0;
+	M[2] = 2*dist(1,2);
+	K[2] = 1;
+
+	// calculate optimal tour length and key points
+	for(int i = 3; i <= n; i++)
 	{
-		return dp[i][j];
+		M[i] = numeric_limits<double>::max();
+		double link = 0;
+		for(int k = i-2; k >= 1; k--)
+		{
+			link += dist(k+1, k+2);
+			double locallen = link + dist(k, i) + M[k+1] - dist(k, k+1);
+			if(locallen < M[i])
+			{
+				M[i] = locallen;
+				K[i] = k;
+			}
+		}
 	}
 
-	double opt1 = betspTour(i+1, j) + dist(i, i+1);
-	double opt2 = betspTour(i+1, i) + dist(j, i+1);
+	double k;
+	int temp_n = n;
+	vector<Coord> segments;
+	Coord s;
+	vector<int> order;
+	vector<bool> used;
+	used.resize(n);
 
-	if(opt1 < opt2)
+	// get segments from key points K
+	s.x = n-2;
+	s.y = n-1;
+	segments.push_back(s);
+	do {
+		k = K[n];
+		s.x = k-1;
+		s.y = n-1;
+		segments.push_back(s);
+		for(int i = k+1; i <= n-2; i++)
+		{
+			s.x = i-1;
+			s.y = i;
+			segments.push_back(s);
+		}
+		n = k+1;
+	} while(k != 1);
+
+	n = temp_n;
+
+	int p = 0;
+
+	// sort segments by ascending first point
+	for(int i = 0; i < n-1; i++)
 	{
-		dp[i][j] = opt1;
+		for(int j = 0; j < n-i-1; j++)
+		{
+			if(segments[j].x > segments[j+1].x)
+			{
+				Coord temp = segments[j];
+				segments[j] = segments[j+1];
+				segments[j+1] = temp;
+			}
+		}
 	}
-	else
+
+	// get one half of tour from segments
+	for(int i = 0; i < n; i++)
 	{
-		dp[i][j] = opt2;
+		if(p == segments[i].x)
+		{
+			p = segments[i].y;
+			used[i] = true;
+			order.push_back(p);
+		}
 	}
-	
-	return dp[i][j];
+
+	// right most point
+	p = n-1;
+
+	// get other half of tour
+	for(int i = n-1; i >= 0; i--)
+	{
+		if(p == segments[i].y && !used[i])
+		{
+			p = segments[i].x;
+			used[i] = true;
+			order.push_back(p);
+		}
+	}
+
+	// missing 0 point
+	order.push_back(0);
+
+	// print tour order
+	for(int i = n-1; i > 0; i--)
+	{
+		cout << order[i] << ' ';
+	}
+	cout << order[0] << endl;
+
+	return M[n];
 }
 
 double dist(int i, int j)
@@ -81,6 +162,8 @@ void getCoords(string fileName)
     fin >> n;
 
 	Coord coord;
+
+	// indexing fix
 	coord.x = 0;
 	coord.y = 0;
 	coords.push_back(coord);
