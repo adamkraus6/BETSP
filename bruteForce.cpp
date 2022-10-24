@@ -16,6 +16,11 @@ bool operator<(Coord lhs, Coord rhs)
     return lhs.x < rhs.x ? true : false;
 }
 
+bool operator==(Coord lhs, Coord rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y ? true : false;
+}
+
 vector<Coord> getCoords(string fileName);
 bool checkBitonic(vector<Coord> path);
 double findPathLength(vector<Coord> path);
@@ -70,7 +75,6 @@ int main(int argc, char **argv)
             << shortestPath << endl;
 
     outFile.close();
-
 }
 
 vector<Coord> getCoords(string fileName)

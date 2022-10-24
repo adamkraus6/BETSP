@@ -138,10 +138,13 @@ int main(int argc, char **argv)
 	for (int i = n - 1; i > 0; i--)
 	{
 		fout << order[i] << ' ';
+		cout << order[i] << " ";
 	}
 	fout << order[0] << endl;
+	cout << order[0] << endl;
 
 	fout << M[n] << endl;
+	cout << M[n] << endl;
 
 	fout.close();
 
