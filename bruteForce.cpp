@@ -16,11 +16,6 @@ bool operator<(Coord lhs, Coord rhs)
     return lhs.x < rhs.x ? true : false;
 }
 
-bool operator==(Coord lhs, Coord rhs)
-{
-    return lhs.x == rhs.x && lhs.y == rhs.y ? true : false;
-}
-
 vector<Coord> getCoords(string fileName);
 bool checkBitonic(vector<Coord> path);
 double findPathLength(vector<Coord> path);
@@ -45,7 +40,6 @@ int main(int argc, char **argv)
     while (next_permutation(coords.begin(), coords.end()))
     {
         bool bitonic = checkBitonic(coords);
-        // cout << bitonic << endl;
 
         if (bitonic)
         {
@@ -55,18 +49,11 @@ int main(int argc, char **argv)
                 shortestPath = length;
                 shortestPathOrder = coords;
             }
-            // for (auto coord : coords)
-            // {
-            //     cout << coord.x << " " << coord.y << endl;
-            // }
-            // cout << endl;
         }
-        permsDone++;
-        cout << permsDone << endl;
     }
 
     string inFileName = string(argv[1]);
-    string outFileName = string(inFileName.erase(inFileName.size() - 3)) + "_brute_force.out";
+    string outFileName = string(inFileName.erase(inFileName.size() - 3)) + ".out";
     ofstream outFile(outFileName);
 
     for (auto coord : shortestPathOrder)
@@ -84,12 +71,6 @@ int main(int argc, char **argv)
 
     outFile.close();
 
-    cout << endl;
-
-    for (auto coord : shortestPathOrder)
-    {
-        cout << coord.x << " " << coord.y << endl;
-    }
 }
 
 vector<Coord> getCoords(string fileName)

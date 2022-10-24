@@ -141,6 +141,8 @@ int main(int argc, char** argv)
 
 	fout << M[n] << endl;
 
+	fout.close()
+
 	return 0;
 }
 
