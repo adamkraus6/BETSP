@@ -1,3 +1,5 @@
+// Mathew Clutter and Adam Kraus
+
 #include <iostream>
 #include <algorithm>
 #include <fstream>

@@ -1,3 +1,5 @@
+// Adam Kraus and Mathew Clutter
+
 #include <iostream>
 #include <vector>
 #include <string>
